@@ -1,0 +1,450 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "=lead-form",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cd7d1151-4ecc-4a75-8f6f-f5aa9ac5a65a",
+      "name": "Webhook",
+      "webhookId": "d8675c61-07f0-4d71-ab01-25dba8847728"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ddf3c80b-8327-409c-b844-8ae1c69d4899",
+              "leftValue": "={{ $json.body.email }}",
+              "rightValue": "@",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        0
+      ],
+      "id": "723a0f10-f018-4f9e-880f-5db1592c6fa6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"ok\": false, \"error\": \"invalid_email\" }\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        544,
+        80
+      ],
+      "id": "90dc64fd-e573-4aa8-a43d-d3988697792b",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Code').item.json.name }}",
+            "Email": "={{ $('Code').item.json.email }}",
+            "Message": "={{ $('Code').item.json.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Created At": "={{ $now }}",
+            "Status": "Qualified",
+            "Score": "={{ $json.choices[0].message.content.score }}",
+            "Notes": "=",
+            "Message Summary (AI)": "={{ $json.choices[0].message.content.summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Is Hot Lead?",
+              "displayName": "Is Hot Lead?",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1168,
+        -288
+      ],
+      "id": "b5e961f4-eb5f-4e66-b48c-fc88c8bbe042",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Soporta JSON directo {name,email,message} o {body:{name,email,message}}\nconst src = $json.body && ($json.body.name || $json.body.email || $json.body.message)\n  ? $json.body\n  : $json;\n\nfunction normalizeEmail(e) {\n  return String(e || '').trim().toLowerCase();\n}\nfunction normalizeName(n) {\n  const t = String(n || '').trim().toLowerCase();\n  return t.replace(/\\b\\w/g, c => c.toUpperCase());\n}\nfunction cleanMessage(m) {\n  return String(m || '').replace(/\\s+/g, ' ').trim();\n}\nfunction guessSource(s) {\n  return s || 'landing-crm-portfolio';\n}\n\nconst normalized = {\n  name: normalizeName(src.name),\n  email: normalizeEmail(src.email),\n  message: cleanMessage(src.message),\n  source: guessSource(src.source),\n  ts: src.ts || new Date().toISOString(),\n};\n\nreturn [normalized];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -128
+      ],
+      "id": "80bd1397-9c4d-488e-b433-46e8137c756f",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-4-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Eres un asistente de operaciones comerciales. Debes clasificar leads entrantes y devolver exclusivamente un objeto JSON válido con este esquema:\n\n{\n  \"category\": \"uno de: cliente | spam | other\",\n  \"score\": número entre 0.0 y 10.0 (probabilidad de convertirse en cliente),\n  \"status\": \"uno de: New | Qualified | Disqualified\",\n  \"summary\": \"una frase breve en español\"\n}\n\nNo devuelvas texto adicional, explicaciones ni formato de bloque de código.\nSolo el JSON, exactamente con esos nombres de campos.\n",
+              "role": "system"
+            },
+            {
+              "content": "=Clasifica este lead basándote en los datos proporcionados.\n\nNombre: {{ $json.name }}\nEmail: {{ $json.email }}\nMensaje: {{ $json.message }}\n\nRecuerda: devuelve SOLO un JSON que siga el formato:\n{\n  \"category\": \"...\",\n  \"score\": ...,\n  \"status\": \"...\",\n  \"summary\": \"...\"\n}\n"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        592,
+        -208
+      ],
+      "id": "401a516d-1733-442e-8c84-2c7cbc8f8086",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "WOiQ0oGdfG9k3rz1",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e77de083-d9a7-4878-a795-a509d7d95046",
+              "leftValue": "={{ $json.choices[0].message.content.category }}",
+              "rightValue": "spam",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        -208
+      ],
+      "id": "8a33a897-7a8d-4369-9a72-4de8f5e519a5",
+      "name": "Cliente?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -96
+      ],
+      "id": "40358d4c-a3ac-43e7-aa42-dd7346307ef9",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        []
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Cliente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente?": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3905db74-3533-4d1d-aa59-8801354a8f78",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ce0dd9b9a25bd2d7442ebd486093ac71778bbfaabcbaf09cf10d8e25e93e59db"
+  },
+  "id": "q1K80V6LdJHwaxDT",
+  "tags": []
+}
