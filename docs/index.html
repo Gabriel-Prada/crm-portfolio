@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto | CRM Portfolio</title>
+  <meta name="description" content="Landing de contacto para enviar leads a n8n → Airtable" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--text:#e5e7eb;--muted:#9ca3af;--brand:#6366f1;--success:#16a34a;--error:#ef4444}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1200px 700px at 80% -10%,rgba(99,102,241,.25),transparent 60%),radial-gradient(1200px 700px at -10% 110%,rgba(16,185,129,.25),transparent 60%),var(--bg);color:var(--text);}
+    .container{max-width:980px;margin:0 auto;padding:48px 20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .logo{font-weight:800;letter-spacing:.3px}
+    .badge{background:rgba(99,102,241,.15);padding:6px 10px;border:1px solid rgba(99,102,241,.35);border-radius:999px;color:#c7d2fe;font-size:12px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;margin-top:32px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid rgba(148,163,184,.15);backdrop-filter: blur(6px);border-radius:16px;padding:24px}
+    h1{font-size:36px;line-height:1.1;margin:0 0 12px}
+    p{margin:0 0 16px;color:var(--muted)}
+    form{display:grid;gap:12px;margin-top:8px}
+    label{font-size:14px;color:#cbd5e1}
+    input,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(148,163,184,.3);background:#0b1220;color:var(--text)}
+    input:focus,textarea:focus{outline:2px solid rgba(99,102,241,.55);border-color:transparent}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;border-radius:12px;border:1px solid rgba(99,102,241,.4);background:linear-gradient(180deg,#4f46e5,#4338ca);color:white;font-weight:600;cursor:pointer}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
+    .note{font-size:12px;color:var(--muted)}
+    .status{margin-top:10px;font-size:14px}
+    .success{color:var(--success)}
+    .error{color:var(--error)}
+    footer{margin-top:40px;color:#94a3b8;font-size:12px;text-align:center}
+    @media (max-width:860px){.hero{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">CRM Portfolio</div>
+      <span class="badge">n8n → Airtable</span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>Hablemos sobre tu proyecto</h1>
+        <p>Completa el formulario y te contactaremos en menos de 24 h. Este formulario envía los datos a un <strong>webhook de n8n</strong> que los guarda en <strong>Airtable</strong> y dispara notificaciones.</p>
+        <div class="card">
+          <form id="leadForm">
+            <div class="row">
+              <div>
+                <label for="name">Nombre</label>
+                <input id="name" name="name" placeholder="Tu nombre" required />
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="tu@email.com" required />
+              </div>
+            </div>
+            <div style="display:none">
+              <!-- Honeypot anti‑spam: los bots suelen rellenarlo; los humanos no lo ven -->
+              <label for="company">Company</label>
+              <input id="company" name="company" tabindex="-1" autocomplete="off" />
+            </div>
+            <div>
+              <label for="message">Mensaje</label>
+              <textarea id="message" name="message" rows="5" placeholder="Cuéntanos qué necesitas…" required></textarea>
+            </div>
+            <button class="btn" id="submitBtn" type="submit">Enviar</button>
+            <div class="note">Al enviar aceptas que almacenemos tus datos para contactarte. No compartimos tu información.</div>
+            <div id="status" class="status"></div>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Cómo funciona (resumen)</h3>
+        <ol>
+          <li>Este formulario hace <code>fetch</code> a tu <strong>Webhook URL</strong> de n8n.</li>
+          <li>n8n valida y guarda en la tabla <em>Leads</em> de Airtable.</li>
+          <li>Si el score de IA es alto, se envía alerta a Slack.</li>
+        </ol>
+        <p class="note">Sustituye la constante <code>WEBHOOK_URL</code> por tu URL real de n8n (producción, no test).</p>
+      </div>
+    </section>
+
+    <footer>© <span id="y"></span> CRM Portfolio</footer>
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ⚠️ Reemplaza esto por tu webhook de n8n
+    // Si tu workflow está activado: https://TU_DOMINIO/webhook/lead-form
+    // Si estás en modo test:     https://TU_DOMINIO/webhook-test/lead-form
+    const WEBHOOK_URL = "https://gaboprada.app.n8n.cloud/webhook-test/lead-form";
+
+    const form = document.getElementById('leadForm');
+    const statusBox = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function setStatus(msg, type){
+      statusBox.textContent = msg;
+      statusBox.className = 'status ' + (type || '');
+    }
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      setStatus('', '');
+
+      // Honeypot
+      const hp = document.getElementById('company').value;
+      if (hp) { setStatus('Bot detectado. Envío cancelado.', 'error'); return; }
+
+      // Payload
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        message: document.getElementById('message').value.trim(),
+        source: 'landing-crm-portfolio',
+        ts: new Date().toISOString()
+      };
+
+      // Validación mínima
+      const emailOk = /.+@.+\..+/.test(payload.email);
+      if(!payload.name || !emailOk || !payload.message){
+        setStatus('Revisa los campos: nombre, email y mensaje son obligatorios.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando…';
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        setStatus('¡Gracias! Tu mensaje fue enviado correctamente.', 'success');
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        setStatus('Hubo un error enviando el formulario. Intenta de nuevo en unos minutos.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar';
+      }
+    });
+  </script>
+</body>
+</html>
