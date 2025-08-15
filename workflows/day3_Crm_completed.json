@@ -1,0 +1,2383 @@
+{
+  "name": "Lead-CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "=lead-form",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        -640
+      ],
+      "id": "cd7d1151-4ecc-4a75-8f6f-f5aa9ac5a65a",
+      "name": "Webhook",
+      "webhookId": "d8675c61-07f0-4d71-ab01-25dba8847728"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ddf3c80b-8327-409c-b844-8ae1c69d4899",
+              "leftValue": "={{ $json.body.email }}",
+              "rightValue": "@",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -448,
+        -624
+      ],
+      "id": "723a0f10-f018-4f9e-880f-5db1592c6fa6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"ok\": false, \"error\": \"invalid_email\" }\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -144,
+        -464
+      ],
+      "id": "90dc64fd-e573-4aa8-a43d-d3988697792b",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('3) Normalize').item.json.name }}",
+            "Email": "={{ $('3) Normalize').item.json.email }}",
+            "Message": "={{ $('3) Normalize').item.json.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Created At": "={{ $now }}",
+            "Status": "Qualified",
+            "Score": "={{ $('Message a model').item.json.choices[0].message.content.score }}",
+            "Notes": "={{ $('Message a model').item.json.choices[0].message.content.summary }}",
+            "Next Follow Up": "={{ $('Code1').item.json.followUpAt }}",
+            "Owner": "Carlos",
+            "Priority": "Normal"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Daniel",
+                  "value": "Daniel"
+                },
+                {
+                  "name": "Sofia",
+                  "value": "Sofia"
+                },
+                {
+                  "name": "Carlos",
+                  "value": "Carlos"
+                },
+                {
+                  "name": "Ivan",
+                  "value": "Ivan"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Normal",
+                  "value": "Normal"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Next Follow Up",
+              "displayName": "Next Follow Up",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1808,
+        -1088
+      ],
+      "id": "b5e961f4-eb5f-4e66-b48c-fc88c8bbe042",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-4-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Eres un asistente de operaciones comerciales. Debes clasificar leads entrantes y devolver exclusivamente un objeto JSON válido con este esquema:\n\n{\n  \"category\": \"uno de: cliente | spam | \",\n  \"score\": número entre 0.0 y 10.0 (probabilidad de convertirse en cliente, se un poco estricto, los mayores a 7 debe ser porque se demuestra un gran interes en el mensaje),\n  \"status\": \"uno de:  Qualified | Disqualified\",\n  \"summary\": \"una frase breve en español\"\n}\n\nNo devuelvas texto adicional, explicaciones ni formato de bloque de código.\nSolo el JSON, exactamente con esos nombres de campos.\n",
+              "role": "system"
+            },
+            {
+              "content": "=Clasifica este lead basándote en los datos proporcionados.\n\nNombre: {{ $('3) Normalize').item.json.name }}\nEmail: {{ $('3) Normalize').item.json.email }}, solo debes revisar el formato del gmail\nMensaje: {{ $('3) Normalize').item.json.message }}\n\nRecuerda: devuelve SOLO un JSON que siga el formato:\n{\n  \"category\": \"...\",\n  \"score\": ...,\n  \"status\": \"...\",\n  \"summary\": \"...\"\n}\n"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        16,
+        -688
+      ],
+      "id": "401a516d-1733-442e-8c84-2c7cbc8f8086",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "WOiQ0oGdfG9k3rz1",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e77de083-d9a7-4878-a795-a509d7d95046",
+              "leftValue": "={{ $('Message a model').item.json.choices[0].message.content.category }}",
+              "rightValue": "spam",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        -656
+      ],
+      "id": "8a33a897-7a8d-4369-9a72-4de8f5e519a5",
+      "name": "Cliente?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        624,
+        -480
+      ],
+      "id": "40358d4c-a3ac-43e7-aa42-dd7346307ef9",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "39505bc9-bcaf-4b08-a30b-60c263363da0",
+              "leftValue": "={{ $('Message a model').item.json.choices[0].message.content.score }}",
+              "rightValue": 2.5,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1280,
+        -672
+      ],
+      "id": "a97dedea-a60c-4842-88ac-061c619131e5",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('3) Normalize').item.json.name }}",
+            "Email": "={{ $('3) Normalize').item.json.email }}",
+            "Message": "={{ $('3) Normalize').item.json.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Created At": "={{ $now }}",
+            "Status": "Disqualified",
+            "Score": "={{ $json.choices[0].message.content.score }}",
+            "Notes": "=",
+            "Message Summary (AI)": "={{ $json.choices[0].message.content.summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Daniel",
+                  "value": "Daniel"
+                },
+                {
+                  "name": "Sofia",
+                  "value": "Sofia"
+                },
+                {
+                  "name": "Carlos",
+                  "value": "Carlos"
+                },
+                {
+                  "name": "Ivan",
+                  "value": "Ivan"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Normal",
+                  "value": "Normal"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Next Follow Up",
+              "displayName": "Next Follow Up",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1472,
+        -144
+      ],
+      "id": "cc789124-6dca-4658-9b92-17e09b167f09",
+      "name": "Create a record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09A22LSA58",
+          "mode": "list",
+          "cachedResultName": "todo-crmworkers"
+        },
+        "text": "=:tada: *Nuevo lead calificado*\nNombre: {{ $json.fields.Name }}\nEmail:{{ $json.fields.Email }}\nScore: {{ $json.fields.Score }}\nStatus: {{ $json.fields.Status }}\nResumen: {{ $json.fields['Message Summary (AI)'].value }}\nFuente: {{ $json.fields.Source }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1984,
+        -1312
+      ],
+      "id": "302e958d-e7ba-492a-981b-499d7dd5c886",
+      "name": "Send a message",
+      "webhookId": "24408ea0-e91f-418f-be2d-6e9035fb6c39",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "oblO6K43fMlcj0ub",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields.Email }}",
+        "subject": "=Gracias {{ $json.fields.Name }}. Te contáctaremos pronto",
+        "message": "=Hola {{ $json.fields.Name }},  ¡Gracias por tu interés! Vimos tu mensaje: \"{{ $json.fields.Message }}\". Nuestro equipo te contactará en breve.\n\nSaludos, Equipo CRM",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2016,
+        -992
+      ],
+      "id": "454a9763-33f3-46a7-8789-8fd4f2d4c3e2",
+      "name": "Send a message1",
+      "webhookId": "15a054c7-e619-4792-9ec7-8bfa8f3e010e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0ZQhQYFsarnqnXOr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Function node: Merge normalized + AI, assign owner, compute follow-up (score 0..10)\n\n// === Config ===\nconst OWNERS = [\"Daniel\", \"Sofia\", \"Carlos\"];\nconst CLOSER = \"Ivan\";\nconst HOT_THRESHOLD = 8.0; // umbral en escala 0..10\n\nfunction clamp10(x) {\n  x = Number(x);\n  if (Number.isNaN(x)) return 0;\n  return Math.max(0, Math.min(10, x));\n}\nfunction hash(s) {\n  let h = 0; s = String(s || \"\");\n  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;\n  return Math.abs(h);\n}\n\n// 1) Normalized data (from \"3) Normalize\")\nconst normNode = $(\"3) Normalize\").first();\nconst norm = normNode ? normNode.json : $json;\n\n// 2) AI classification (from \"Message a model\")\nconst aiNode = $(\"Message a model\").first();\nlet content = aiNode?.json?.choices?.[0]?.message?.content;\n\n// soportar content como string JSON\nif (typeof content === \"string\") {\n  try { content = JSON.parse(content); } catch { content = {}; }\n}\nif (!content || typeof content !== \"object\") content = {};\n\n// 3) Merge base output\nconst out = {\n  // Normalizados\n  name: norm?.name ?? \"\",\n  email: norm?.email ?? \"\",\n  message: norm?.message ?? \"\",\n  source: norm?.source ?? \"landing-crm-portfolio\",\n  ts: norm?.ts ?? new Date().toISOString(),\n\n  // IA (score 0..10)\n  category: content.category ?? \"other\",\n  score: clamp10(content.score),\n  status: content.status ?? \"New\",\n  summary: content.summary ?? \"\"\n};\n\n// 4) Owner + priority\nlet owner = OWNERS.length ? OWNERS[hash(out.email) % OWNERS.length] : \"Unassigned\";\nlet priority = \"normal\";\nif (out.score >= HOT_THRESHOLD ) {\n  owner = CLOSER || owner;\n  priority = \"hot\";\n}\n\n// 5) Follow-up date\nconst now = new Date();\nconst followUpDays = priority === \"hot\" ? 1 : (out.status === \"Qualified\" ? 2 : 3);\nconst followUpAt = new Date(now.getTime() + followUpDays * 86400000).toISOString();\n\n// 6) Return single payload\nreturn [{\n  ...out,\n  owner,\n  priority,\n  followUpAt\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        -800
+      ],
+      "id": "7eb93bb6-7841-42cc-931c-c796fa51f585",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Soporta JSON directo {name,email,message} o {body:{name,email,message}}\nconst src = $json.body && ($json.body.name || $json.body.email || $json.body.message)\n  ? $json.body\n  : $json;\n\nfunction normalizeEmail(e) {\n  return String(e || '').trim().toLowerCase();\n}\nfunction normalizeName(n) {\n  const t = String(n || '').trim().toLowerCase();\n  return t.replace(/\\b\\w/g, c => c.toUpperCase());\n}\nfunction cleanMessage(m) {\n  return String(m || '').replace(/\\s+/g, ' ').trim();\n}\nfunction guessSource(s) {\n  return s || 'landing-crm-portfolio';\n}\n\nconst normalized = {\n  name: normalizeName(src.name),\n  email: normalizeEmail(src.email),\n  message: cleanMessage(src.message),\n  source: guessSource(src.source),\n  ts: src.ts || new Date().toISOString(),\n};\n\nreturn [normalized];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        -848
+      ],
+      "id": "80bd1397-9c4d-488e-b433-46e8137c756f",
+      "name": "3) Normalize"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('3) Normalize').item.json.name }}",
+            "Email": "={{ $('3) Normalize').item.json.email }}",
+            "Message": "={{ $('3) Normalize').item.json.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Created At": "={{ $now }}",
+            "Status": "Qualified",
+            "Score": "={{ $('Message a model').item.json.choices[0].message.content.score }}",
+            "Notes": "={{ $('Code1').item.json.summary }}",
+            "Next Follow Up": "={{ $('Code1').item.json.followUpAt }}",
+            "Owner": "Sofia",
+            "Priority": "Normal"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Daniel",
+                  "value": "Daniel"
+                },
+                {
+                  "name": "Sofia",
+                  "value": "Sofia"
+                },
+                {
+                  "name": "Carlos",
+                  "value": "Carlos"
+                },
+                {
+                  "name": "Ivan",
+                  "value": "Ivan"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Normal",
+                  "value": "Normal"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Next Follow Up",
+              "displayName": "Next Follow Up",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1872,
+        -768
+      ],
+      "id": "87f61774-bfe4-4e77-8ed9-2d29f3e10c72",
+      "name": "Create a record2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('3) Normalize').item.json.name }}",
+            "Email": "={{ $('3) Normalize').item.json.email }}",
+            "Message": "={{ $('3) Normalize').item.json.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Created At": "={{ $now }}",
+            "Status": "Qualified",
+            "Score": "={{ $('Message a model').item.json.choices[0].message.content.score }}",
+            "Notes": "=",
+            "Next Follow Up": "={{ $('Code1').item.json.followUpAt }}",
+            "Owner": "Daniel",
+            "Priority": "Normal"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Daniel",
+                  "value": "Daniel"
+                },
+                {
+                  "name": "Sofia",
+                  "value": "Sofia"
+                },
+                {
+                  "name": "Carlos",
+                  "value": "Carlos"
+                },
+                {
+                  "name": "Ivan",
+                  "value": "Ivan"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Normal",
+                  "value": "Normal"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Next Follow Up",
+              "displayName": "Next Follow Up",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1840,
+        -432
+      ],
+      "id": "b7f7d6c0-9a3e-49d1-9601-4d3d0fd98ead",
+      "name": "Create a record3",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Code1').item.json.owner }}",
+                    "rightValue": "Carlos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "3b55a35b-e94b-4439-94b8-2d6442a61607"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Carlos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5bfcb575-b7d1-42e2-b5d1-60918848b470",
+                    "leftValue": "={{ $('Code1').item.json.owner }}",
+                    "rightValue": "Sofia",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sofia"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "088a4dea-2e23-474a-87f6-9fa7bce426dc",
+                    "leftValue": "={{ $('Code1').item.json.owner }}",
+                    "rightValue": "Daniel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Daniel"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1648,
+        -784
+      ],
+      "id": "10477377-c0cc-4ad3-a56d-e139622e2f46",
+      "name": "Owner"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c68974df-042b-41e6-90b1-aeb83dda397e",
+              "leftValue": "={{ $('Code1').item.json.owner }}",
+              "rightValue": "Ivan",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1472,
+        -592
+      ],
+      "id": "fa2ee929-a8f2-4535-a0f1-23727bf224e6",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('3) Normalize').item.json.name }}",
+            "Email": "={{ $('3) Normalize').item.json.email }}",
+            "Message": "={{ $('3) Normalize').item.json.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Created At": "={{ $now }}",
+            "Status": "Qualified",
+            "Score": "={{ $json.score }}",
+            "Notes": "={{ $json.summary }}",
+            "Next Follow Up": "={{ $json.followUpAt }}",
+            "Owner": "Ivan",
+            "Priority": "Hot"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Daniel",
+                  "value": "Daniel"
+                },
+                {
+                  "name": "Sofia",
+                  "value": "Sofia"
+                },
+                {
+                  "name": "Carlos",
+                  "value": "Carlos"
+                },
+                {
+                  "name": "Ivan",
+                  "value": "Ivan"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Normal",
+                  "value": "Normal"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Next Follow Up",
+              "displayName": "Next Follow Up",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1696,
+        -240
+      ],
+      "id": "b962f432-b341-4538-9f3b-6cbb26a1ccf4",
+      "name": "Create a record4",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09A22LSA58",
+          "mode": "list",
+          "cachedResultName": "todo-crmworkers"
+        },
+        "text": "=:tada: *Nuevo lead calificado*\nNombre: {{ $json.fields.Name }}\nEmail:{{ $json.fields.Email }}\nScore: {{ $json.fields.Score }}\nStatus: {{ $json.fields.Status }}\nResumen: {{ $json.fields['Message Summary (AI)'].value }}\nFuente: {{ $json.fields.Source }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        -816
+      ],
+      "id": "aa8ef08c-4ead-42d5-a003-8712bc405d9e",
+      "name": "Send a message2",
+      "webhookId": "24408ea0-e91f-418f-be2d-6e9035fb6c39",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "oblO6K43fMlcj0ub",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09A22LSA58",
+          "mode": "list",
+          "cachedResultName": "todo-crmworkers"
+        },
+        "text": "=:tada: *Nuevo lead calificado*\nNombre: {{ $json.fields.Name }}\nEmail:{{ $json.fields.Email }}\nScore: {{ $json.fields.Score }}\nStatus: {{ $json.fields.Status }}\nResumen: {{ $json.fields['Message Summary (AI)'].value }}\nFuente: {{ $json.fields.Source }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2176,
+        -432
+      ],
+      "id": "c00fb68a-e52f-4378-bafc-8a5796cf996b",
+      "name": "Send a message3",
+      "webhookId": "24408ea0-e91f-418f-be2d-6e9035fb6c39",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "oblO6K43fMlcj0ub",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields.Email }}",
+        "subject": "=Gracias {{ $json.fields.Name }}. Te contáctaremos pronto",
+        "message": "=Hola {{ $json.fields.Name }},  ¡Gracias por tu interés! Vimos tu mensaje: \"{{ $json.fields.Message }}\". Nuestro equipo te contactará en breve.\n\nSaludos, Equipo CRM",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2144,
+        -624
+      ],
+      "id": "b8dbe33e-5844-43cb-b692-3ff98af57c00",
+      "name": "Send a message4",
+      "webhookId": "15a054c7-e619-4792-9ec7-8bfa8f3e010e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0ZQhQYFsarnqnXOr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields.Email }}",
+        "subject": "=Gracias {{ $json.fields.Name }}. Te contáctaremos pronto",
+        "message": "=Hola {{ $json.fields.Name }},  ¡Gracias por tu interés! Vimos tu mensaje: \"{{ $json.fields.Message }}\". Nuestro equipo te contactará en breve.\n\nSaludos, Equipo CRM",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2144,
+        -240
+      ],
+      "id": "0de72d7e-8ae6-487f-8e9c-f34603b74688",
+      "name": "Send a message5",
+      "webhookId": "15a054c7-e619-4792-9ec7-8bfa8f3e010e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0ZQhQYFsarnqnXOr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields.Email }}",
+        "subject": "=Gracias {{ $json.fields.Name }}. Te contáctaremos pronto",
+        "message": "=Hola {{ $json.fields.Name }},  ¡Gracias por tu interés! Vimos tu mensaje: \"{{ $json.fields.Message }}\". Nuestro equipo te contactará en breve.\n\nSaludos, Equipo CRM",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1952,
+        -16
+      ],
+      "id": "dd59ff7c-73d8-4ae9-81b1-f82d5aa0c5c7",
+      "name": "Send a message6",
+      "webhookId": "15a054c7-e619-4792-9ec7-8bfa8f3e010e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0ZQhQYFsarnqnXOr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09A22LSA58",
+          "mode": "list",
+          "cachedResultName": "todo-crmworkers"
+        },
+        "text": "=:tada: *Nuevo lead calificado*\nNombre: {{ $json.fields.Name }}\nEmail:{{ $json.fields.Email }}\nScore: {{ $('Message a model').item.json.choices[0].message.content.score }}\nStatus: {{ $json.fields.Status }}\nResumen: {{ $('Message a model').item.json.choices[0].message.content.summary }}\nFuente: {{ $json.fields.Source }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1920,
+        -224
+      ],
+      "id": "e0b8ea1e-e2d2-4eeb-8e4b-c4c9249d26d1",
+      "name": "Send a message7",
+      "webhookId": "24408ea0-e91f-418f-be2d-6e9035fb6c39",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "oblO6K43fMlcj0ub",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "list",
+          "cachedResultName": "Lead CRM",
+          "cachedResultUrl": "https://airtable.com/appGbuVoccuyxb1lY"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appGbuVoccuyxb1lY/tblPAJuMZnQA9EkKJ"
+        },
+        "filterByFormula": "=LOWER({Email}) = LOWER('{{ $('Webhook').item.json.body.email }}')\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        784,
+        -944
+      ],
+      "id": "8419fe7f-b8d7-44b4-b735-2e2a602a5529",
+      "name": "Search records",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appGbuVoccuyxb1lY",
+          "mode": "list",
+          "cachedResultName": "Lead CRM",
+          "cachedResultUrl": "https://airtable.com/appGbuVoccuyxb1lY"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblPAJuMZnQA9EkKJ",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appGbuVoccuyxb1lY/tblPAJuMZnQA9EkKJ"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Webhook').item.json.body.name }}",
+            "Email": "={{ $('Webhook').item.json.body.email }}",
+            "Message": "={{ $('Webhook').item.json.body.message }}",
+            "Source": "={{ $('Webhook').item.json.body.source }}",
+            "Status": "Qualified",
+            "Score": "={{ $('Message a model').item.json.choices[0].message.content.score }}",
+            "Next Follow Up": "={{ $('Code1').item.json.followUpAt }}",
+            "Created At": "={{ $now }}",
+            "Notes": "={{ $('Message a model').item.json.choices[0].message.content.summary }}",
+            "Priority": "Hot",
+            "id": "={{ $('Search records').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "Disqualified",
+                  "value": "Disqualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Daniel",
+                  "value": "Daniel"
+                },
+                {
+                  "name": "Sofia",
+                  "value": "Sofia"
+                },
+                {
+                  "name": "Carlos",
+                  "value": "Carlos"
+                },
+                {
+                  "name": "Ivan",
+                  "value": "Ivan"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Days Since Created",
+              "displayName": "Days Since Created",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                },
+                {
+                  "name": "Normal",
+                  "value": "Normal"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message Summary (AI)",
+              "displayName": "Message Summary (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Lead Qualification Suggestions (AI)",
+              "displayName": "Lead Qualification Suggestions (AI)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Next Follow Up",
+              "displayName": "Next Follow Up",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1296,
+        -1232
+      ],
+      "id": "0b1da2be-2b77-484b-ad4f-1c46c8592db3",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Suov7iS9kwEtIaa1",
+          "name": "crm"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9e9420ca-583d-4b19-b9b4-4abcf0142163",
+              "leftValue": "={{ $('Search records').item.json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        -1040
+      ],
+      "id": "aa039b12-b80e-475d-91e5-9f8d4a07c6d4",
+      "name": "If3",
+      "alwaysOutputData": false
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "3) Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Cliente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente?": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3) Normalize": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Owner": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Owner",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record3": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record4": {
+      "main": [
+        [
+          {
+            "node": "Send a message6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        []
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "979ef294-1ad8-4708-9cd5-3cad8613a8c7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ce0dd9b9a25bd2d7442ebd486093ac71778bbfaabcbaf09cf10d8e25e93e59db"
+  },
+  "id": "q1K80V6LdJHwaxDT",
+  "tags": []
+}
